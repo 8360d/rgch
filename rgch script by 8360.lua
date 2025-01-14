@@ -2,12 +2,6 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Roboj
 local Window = Library.CreateLib("РГЧ script             by 8360", "RJTheme1")
 local Tab = Window:NewTab("main")
 
--- Ragdoll Section
-local Section1 = Tab:NewSection("Ragdoll")
-Section1:NewButton("off ragdoll", "выключает ragdoll", function()
-game.Players.LocalPlayer.character["Ragdoll_Local"].Archivable = false
-
-end)
 
 -- Gingerbread Section (сделано кнопкой для сбора печенек)
 local Section2 = Tab:NewSection("Gingerbread")
