@@ -5,12 +5,7 @@ local Tab = Window:NewTab("main")
 -- Ragdoll Section
 local Section1 = Tab:NewSection("Ragdoll")
 Section1:NewButton("off ragdoll", "выключает ragdoll", function()
-    local character = game.Players.LocalPlayer.Character
-    if character and character:FindFirstChild("Ragdoll_Local") then
-        character.Ragdoll_Local.Disabled = true
-    else
-        warn("Ragdoll_Local не найден в персонаже!")
-    end
+game.Players.LocalPlayer.character["Ragdoll_Controls"].Disabled = true  
 end)
 
 -- Gingerbread Section (сделано кнопкой для сбора печенек)
