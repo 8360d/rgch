@@ -2,18 +2,6 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Roboj
 local Window = Library.CreateLib("РГЧ script             by 8360", "RJTheme1")
 local Tab = Window:NewTab("main")
 
-
--- Gingerbread Section (сделано кнопкой для сбора печенек)
-local Section2 = Tab:NewSection("Gingerbread")
-Section2:NewButton("Собрать печеньки", "Собирает все печеньки", function()
-    for _, v in pairs(game:GetDescendants()) do
-        if v.Name == "Gingerbread" and v:IsA("BasePart") then
-            v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            wait(0.3)
-        end
-    end
-end)
-
 -- Delete Portals Section
 local Section3 = Tab:NewSection("Delete Portals")
 Section3:NewButton("Delete all portals", "Удаляет все порталы", function()
