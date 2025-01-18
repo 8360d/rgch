@@ -1,5 +1,5 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Robojini/Tuturial_UI_Library/main/UI_Template_1"))()
-local Window = Library.CreateLib("РГЧ script             by 8360", "RJTheme1")
+local Window = Library.CreateLib("script by 8360", "RJTheme1")
 local Tab = Window:NewTab("main")
 
 -- Delete Portals Section
