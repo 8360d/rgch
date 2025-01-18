@@ -1,10 +1,15 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Robojini/Tuturial_UI_Library/main/UI_Template_1"))()
-local Window = Library.CreateLib("script by 8360", "RJTheme1")
+local Window = Library.CreateLib("8360 script", "RJTheme1")
 local Tab = Window:NewTab("main")
 
+-- Ragdoll Section
+local Section1 = Tab:NewSection("mods")
+Section1:NewButton("Anti Ragdoll", "выключает ragdoll", function()
+game:GetService("ReplicatedStorage").LocalRagdollEvent:Destroy()
+end)
+
 -- Delete Portals Section
-local Section3 = Tab:NewSection("Delete Portals")
-Section3:NewButton("Delete all portals", "Удаляет все порталы", function()
+Section1:NewButton("Delete all portals", "Удаляет все порталы", function()
     local portals = {
         workspace.Portals:FindFirstChild("PyaterochkaPortal"),
         workspace.Portals:FindFirstChild("Samokat_RussiaChat"),
@@ -22,10 +27,6 @@ Section3:NewButton("Delete all portals", "Удаляет все порталы",
     end
 end)
 
-local Section3 = Tab:NewSection("dex")
-Section3:NewButton("dex", "dex", function()
-loadstring(game:HttpGet("https://cdn.wearedevs.net/scripts/Dex%20Explorer.txt"))()
-end)
 local Tab = Window:NewTab("misc")
 local Section1 = Tab:NewSection("jerk")
 Section1:NewButton("jerking", "jerk", function()
