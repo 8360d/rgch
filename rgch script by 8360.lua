@@ -6,7 +6,25 @@ local Tab = Window:NewTab("main")
 local Section1 = Tab:NewSection("mods")
 Section1:NewButton("Anti Ragdoll", "выключает ragdoll", function()
 game:GetService("ReplicatedStorage").LocalRagdollEvent:Destroy()
+local player = game.Players.LocalPlayer
+
+local function killCharacter()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.Health = 0
+        print("Персонаж убит.")
+    else
+        print("Humanoid не найден.")
+    end
+end
+
+-- Если персонаж уже загружен, убить его сразу
+if player.Character then
+    killCharacter()
+end
 end)
+
 
 -- Delete Portals Section
 Section1:NewButton("Delete all portals", "Удаляет все порталы", function()
