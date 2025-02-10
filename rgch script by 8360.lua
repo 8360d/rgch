@@ -1,9 +1,16 @@
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Robojini/Tuturial_UI_Library/main/UI_Template_1"))()
 local Window = Library.CreateLib("8360 script", "RJTheme1")
 local Tab = Window:NewTab("main")
-
 -- Ragdoll Section
 local Section1 = Tab:NewSection("mods")
+Section1:NewButton("Сбор монет", "собирает монеты", function()
+    for _, v in pairs(game:GetDescendants()) do
+        if v.Name == "CoinMesh" and v:IsA("BasePart") then
+            v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            wait(0.1)
+        end
+    end
+end)
 Section1:NewButton("Anti Ragdoll", "выключает ragdoll", function()
 game:GetService("ReplicatedStorage").LocalRagdollEvent:Destroy()
 local player = game.Players.LocalPlayer
