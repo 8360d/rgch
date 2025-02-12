@@ -14,9 +14,9 @@ local Window = Fluent:CreateWindow({
 
 --Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
 local Tabs = {
-    Main = Window:AddTab({ Title = "Main", Icon = "" }),
-	Misc = Window:AddTab({ Title = "Misc", Icon = "" }),
-	Basic = Window:AddTab({ Title = "Basic", Icon = "" }),
+    Main = Window:AddTab({ Title = "Main", Icon = "rbxassetid://10709807111" }),
+	Misc = Window:AddTab({ Title = "Misc", Icon = "rbxassetid://10734963400" }),
+	Basic = Window:AddTab({ Title = "Player", Icon = "rbxassetid://10747372167" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
@@ -222,7 +222,7 @@ end
 
 
 local Dropdown = Tabs.Basic:AddDropdown("Dropdown", {
-    Title = "Gravity presets.",
+    Title = "Gravity presets",
     Values = {"Default gravity", "Low gravity"},
     Multi = false,
     Default = 1,
@@ -348,7 +348,7 @@ Window:SelectTab(1)
 
 Fluent:Notify({
     Title = "Fluent by 8360",
-    Content = "Скрипт полностью загрузился, удачного пользования, фрик!",
+    Content = "Скрипт полностью загрузился, удачного пользования!",
     Duration = 10
 })
 
