@@ -1,17 +1,47 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Robojini/Tuturial_UI_Library/main/UI_Template_1"))()
-local Window = Library.CreateLib("8360 script", "RJTheme1")
-local Tab = Window:NewTab("main")
--- Ragdoll Section
-local Section1 = Tab:NewSection("mods")
-Section1:NewButton("Сбор монет", "собирает монеты", function()
-    for _, v in pairs(game:GetDescendants()) do
-        if v.Name == "CoinMesh" and v:IsA("BasePart") then
-            v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            wait(0.1)
-        end
-    end
-end)
-Section1:NewButton("Anti Ragdoll", "выключает ragdoll", function()
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+
+local Window = Fluent:CreateWindow({
+    Title = "Fluent ",
+    SubTitle = "by 8360",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
+    Theme = "Dark",
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+})
+
+--Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "" }),
+	Misc = Window:AddTab({ Title = "Misc", Icon = "" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
+
+local Options = Fluent.Options
+
+do
+    Fluent:Notify({
+        Title = "Notification",
+        Content = "This is a notification",
+        SubContent = "SubContent", -- Optional
+        Duration = 5 -- Set to nil to make the notification not disappear
+    })
+
+
+
+    Tabs.Main:AddParagraph({
+        Title = "Main scripts",
+        Content = "Тут находятся основные скрипты."
+    })
+
+
+
+    Tabs.Main:AddButton({
+        Title = "AntiRagdoll",
+        Description = "Выключает ragdoll.",
+        Callback = function()
 game:GetService("ReplicatedStorage").LocalRagdollEvent:Destroy()
 local player = game.Players.LocalPlayer
 
@@ -30,197 +60,28 @@ end
 if player.Character then
     killCharacter()
 end
-end)
+end
+    })
 
-
--- Delete Portals Section
-Section1:NewButton("Delete all portals", "Удаляет все порталы", function()
-    local portals = {
-        workspace.Portals:FindFirstChild("PyaterochkaPortal"),
-        workspace.Portals:FindFirstChild("Samokat_RussiaChat"),
-        workspace.Portals:FindFirstChild("Dixy_RussiaChat"),
-        workspace.Portals:FindFirstChild("Portal")
-    }
-
-    for _, portal in pairs(portals) do
-        if portal and portal:FindFirstChild("Teleport") then
-            portal.Teleport:Destroy()
-            print("Удалён Teleport в портале:", portal.Name)
-        else
-            warn("Teleport не найден в портале или портал отсутствует:", portal and portal.Name or "Unknown")
+Tabs.Main:AddButton({
+        Title = "Сбор монет",
+        Description = "Собирает китайские монеты.",
+        Callback = function()
+		for _, v in pairs(game:GetDescendants()) do
+        if v.Name == "CoinMesh" and v:IsA("BasePart") then
+            v.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            wait(0.1)
         end
-    end
-end)
-
-Section1:NewButton("particle fling", "particle fling", function()
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = Players.LocalPlayer
-local Workspace = game:GetService("Workspace")
-
-local angle = 1
-local radius = 10
-local blackHoleActive = false
-local cursorAttractionActive = false
-local cursorPosition = Vector3.new()
-
-local function getCursorPosition()
-    local mouseLocation = UserInputService:GetMouseLocation()
-    local camera = Workspace.CurrentCamera
-    local ray = camera:ScreenPointToRay(mouseLocation.X, mouseLocation.Y)
-    local raycastResult = Workspace:Raycast(ray.Origin, ray.Direction * 1000)
-    if raycastResult then
-        return raycastResult.Position
-    else
-        return ray.Origin + ray.Direction * 1000
-    end
+		end
+		end})
 end
 
-local function setupPlayer()
-    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-    local Folder = Instance.new("Folder", Workspace)
-    local Part = Instance.new("Part", Folder)
-    local Attachment1 = Instance.new("Attachment", Part)
-    Part.Anchored = true
-    Part.CanCollide = false
-    Part.Transparency = 1
-
-    return humanoidRootPart, Attachment1
-end
-
-local humanoidRootPart, Attachment1 = setupPlayer()
-
-if not getgenv().Network then
-    getgenv().Network = {
-        BaseParts = {},
-        Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
-    }
-
-    Network.RetainPart = function(part)
-        if typeof(part) == "Instance" and part:IsA("BasePart") and part:IsDescendantOf(Workspace) then
-            table.insert(Network.BaseParts, part)
-            part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-            part.CanCollide = false
-        end
-    end
-
-    local function EnablePartControl()
-        LocalPlayer.ReplicationFocus = Workspace
-        RunService.Heartbeat:Connect(function()
-            sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-            for _, part in pairs(Network.BaseParts) do
-                if part:IsDescendantOf(Workspace) then
-                    part.Velocity = Network.Velocity
-                end
-            end
-        end)
-    end
-
-    EnablePartControl()
-end
-
-local function ForcePart(v)
-    if v:IsA("Part") and not v.Anchored and not v.Parent:FindFirstChild("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
-        for _, x in next, v:GetChildren() do
-            if x:IsA("BodyAngularVelocity") or x:IsA("BodyForce") or x:IsA("BodyGyro") or x:IsA("BodyPosition") or x:IsA("BodyThrust") or x:IsA("BodyVelocity") or x:IsA("RocketPropulsion") then
-                x:Destroy()
-            end
-        end
-        if v:FindFirstChild("Attachment") then
-            v:FindFirstChild("Attachment"):Destroy()
-        end
-        if v:FindFirstChild("AlignPosition") then
-            v:FindFirstChild("AlignPosition"):Destroy()
-        end
-        if v:FindFirstChild("Torque") then
-            v:FindFirstChild("Torque"):Destroy()
-        end
-        v.CanCollide = false
-
-        local Torque = Instance.new("Torque", v)
-        Torque.Torque = Vector3.new(1000000, 1000000, 1000000)
-        local AlignPosition = Instance.new("AlignPosition", v)
-        local Attachment2 = Instance.new("Attachment", v)
-        Torque.Attachment0 = Attachment2
-        AlignPosition.MaxForce = math.huge
-        AlignPosition.MaxVelocity = math.huge
-        AlignPosition.Responsiveness = 500
-        AlignPosition.Attachment0 = Attachment2
-        AlignPosition.Attachment1 = Attachment1
-    end
-end
-
-local function toggleBlackHole()
-    blackHoleActive = not blackHoleActive
-    if blackHoleActive then
-        for _, v in next, Workspace:GetDescendants() do
-            ForcePart(v)
-        end
-
-        Workspace.DescendantAdded:Connect(function(v)
-            if blackHoleActive then
-                ForcePart(v)
-            end
-        end)
-
-        spawn(function()
-            while blackHoleActive and RunService.RenderStepped:Wait() do
-                if cursorAttractionActive then
-                    cursorPosition = getCursorPosition()
-                    Attachment1.WorldCFrame = CFrame.new(cursorPosition)
-                else
-                    angle = angle + math.rad(2)
-                    local offsetX = math.cos(angle) * radius
-                    local offsetZ = math.sin(angle) * radius
-                    Attachment1.WorldCFrame = humanoidRootPart.CFrame * CFrame.new(offsetX, 0, offsetZ)
-                end
-            end
-        end)
-    else
-        Attachment1.WorldCFrame = CFrame.new(0, -1000, 0)
-    end
-end
-
-LocalPlayer.CharacterAdded:Connect(function()
-    humanoidRootPart, Attachment1 = setupPlayer()
-    if blackHoleActive then
-        toggleBlackHole()
-    end
-end)
-
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/miroeramaa/TurtleLib/main/TurtleUiLib.lua"))()
-local window = library:Window("8360")
-
-window:Slider("Radius Blackhole",1,100,10, function(Value)
-   radius = Value
-end)
-
-window:Toggle("Blackhole", true, function(Value)
-       if Value then
-            toggleBlackHole()
-        else
-            blackHoleActive = false
-        end
-end)
-
-window:Toggle("Cursor Attraction", false, function(Value)
-    cursorAttractionActive = Value
-end)
-
-spawn(function()
-    while true do
-        RunService.RenderStepped:Wait()
-    end
-end)
-
-toggleBlackHole()
-end)
 
 
-Section1:NewButton("spy", "spy", function()
+Tabs.Main:AddButton({
+        Title = "Chat spying",
+        Description = "Включает spying чата.",
+        Callback = function()
 enabled = true
 --if true will xhexk your messages too
 spyOnMyself = true
@@ -285,35 +146,106 @@ wait(3)
 local chatFrame = player.PlayerGui.Chat.Frame
 chatFrame.ChatChannelParentFrame.Visible = true
 chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
-end)
+end})
 
 
-local Tab = Window:NewTab("misc")
-local Section1 = Tab:NewSection("jerk")
-Section1:NewButton("jerking", "jerk", function()
+Tabs.Misc:AddParagraph({
+        Title = "Misc scripts",
+        Content = "Тут находятся дополнительные скрипты."
+    })
+
+
+Tabs.Misc:AddButton({
+        Title = "Jerk off",
+        Description = "",
+        Callback = function()
 loadstring(game:HttpGet("https://pastefy.app/YZoglOyJ/raw"))()
-end)
-local Section1 = Tab:NewSection("infinite yield")
-Section1:NewButton("infinite yield", "infinite yield", function()
+end})
+
+Tabs.Main:AddButton({
+        Title = "Infinite Yield",
+        Description = "Включает Infinite Yield",
+        Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-end)
-local Section1 = Tab:NewSection("orca hub")
-Section1:NewButton("orca hub", "orca hub", function()
+end})
+
+Tabs.Misc:AddButton({
+        Title = "Orca hub",
+        Description = "",
+        Callback = function()
 loadstring(game:HttpGetAsync('https://raw.githubusercontent.com/richie0866/orca/master/public/latest.lua'))()
-end)
-local Section1 = Tab:NewSection("emotes")
-Section1:NewButton("emotes", "emotes", function()
+end})
+
+Tabs.Misc:AddButton({
+        Title = "Emotes",
+        Description = "",
+        Callback = function()
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua"))()
-end)
-local Section1 = Tab:NewSection("canon")
-Section1:NewButton("canon", "canon", function()
+end})
+
+Tabs.Misc:AddButton({
+        Title = "Canon",
+        Description = "",
+        Callback = function()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Cannon%20Ball'))()
-end)
-local Section1 = Tab:NewSection("eazvy hub")
-Section1:NewButton("eazvy hub", "eazvy hub", function()
+end})
+
+Tabs.Misc:AddButton({
+        Title = "Eazvy hub",
+        Description = "",
+        Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Eazvy/public-scripts/main/Universal_Animations_Emotes.lua"))()
-end)
-local Section1 = Tab:NewSection("system broken")
-Section1:NewButton("system broken", "system broken", function()
+end})
+
+Tabs.Misc:AddButton({
+        Title = "System Broken",
+        Description = "",
+        Callback = function()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/script"))()
-end)
+end})
+
+Tabs.Misc:AddButton({
+        Title = "Nitrogen",
+        Description = "Password - nitrogencomingback",
+        Callback = function()
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/nitrogenhbexp/beta-script/refs/heads/main/script'),true))()
+end})
+
+
+
+-- Addons:
+-- SaveManager (Allows you to have a configuration system)
+-- InterfaceManager (Allows you to have a interface managment system)
+
+-- Hand the library over to our managers
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+-- Ignore keys that are used by ThemeManager.
+-- (we dont want configs to save themes, do we?)
+SaveManager:IgnoreThemeSettings()
+
+-- You can add indexes of elements the save manager should ignore
+SaveManager:SetIgnoreIndexes({})
+
+-- use case for doing it this way:
+-- a script hub could have themes in a global folder
+-- and game configs in a separate folder per game
+InterfaceManager:SetFolder("FluentScriptHub")
+SaveManager:SetFolder("FluentScriptHub/specific-game")
+
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+
+Window:SelectTab(1)
+
+Fluent:Notify({
+    Title = "Fluent",
+    Content = "The script has been loaded.",
+    Duration = 8
+})
+
+-- You can use the SaveManager:LoadAutoloadConfig() to load a config
+-- which has been marked to be one that auto loads!
+SaveManager:LoadAutoloadConfig()
