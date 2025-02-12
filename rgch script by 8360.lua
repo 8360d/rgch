@@ -17,6 +17,7 @@ local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "rbxassetid://10709807111" }),
 	Misc = Window:AddTab({ Title = "Misc", Icon = "rbxassetid://10734963400" }),
 	Basic = Window:AddTab({ Title = "Player", Icon = "rbxassetid://10747372167" }),
+	Teleports = Window:AddTab({ Title = "Teleports", Icon = "rbxassetid://10709752035" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
@@ -146,6 +147,13 @@ Tabs.Misc:AddParagraph({
         Content = "Тут находятся дополнительные скрипты."
     })
 
+
+Tabs.Basic:AddParagraph({
+        Title = "Player scripts",
+        Content = "Тут находятся скрипты для игрока."
+    })
+
+
 local Slider = Tabs.Basic:AddSlider("Slider", {
         Title = "Speed",
         Description = "Меняет скорость игрока.",
@@ -171,7 +179,6 @@ end
 end)
 Slider:SetValue(16)
 
-
  local Slider = Tabs.Basic:AddSlider("Slider", {
         Title = "Gravity",
         Description = "Меняет гравитацию игрока.",
@@ -185,7 +192,7 @@ Slider:SetValue(16)
     })
 
     Slider:OnChanged(function(Value)
-        local newGravity = Value -- Установите нужное значение гравитации (по умолчанию 196.2)
+        local newGravity = Value
 
 game.Workspace.Gravity = newGravity
     end)
@@ -259,6 +266,80 @@ end
 end)
 
 
+ local Slider = Tabs.Basic:AddSlider("Slider", {
+        Title = "FOV",
+        Description = "Меняет FOV игрока.",
+        Default = 70,
+        Min = 0,
+        Max = 120,
+        Rounding = 1,
+        Callback = function(Value)
+            print("Slider was changed:", Value)
+        end
+    })
+
+    Slider:OnChanged(function(Value)
+ local camera = game.Workspace.CurrentCamera
+
+local function setFOV(value)
+    camera.FieldOfView = value
+end
+setFOV(Value)
+    end)
+    Slider:SetValue(70)
+
+Tabs.Teleports:AddParagraph({
+        Title = "Teleports",
+        Content = "Тут находятся телепорты."
+    })
+
+    Tabs.Teleports:AddButton({
+        Title = "Телепорт на спавн",
+        Description = "",
+        Callback = function()
+local targetObject = workspace:GetChildren()[90]
+if targetObject then
+    local player = game.Players.LocalPlayer
+    local targetPosition = targetObject.Position + Vector3.new(0, 5, 0)  -- Поднимаем на 5 единиц по оси Y
+    player.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+end
+end})
+
+Tabs.Teleports:AddButton({
+        Title = "Телепорт в приватную комнату",
+        Description = "",
+        Callback = function()
+local targetObject = workspace.map:GetChildren()[63].Bed.BedFrame:GetChildren()[2]
+if targetObject then
+    local player = game.Players.LocalPlayer
+    local targetPosition = targetObject.Position + Vector3.new(0, 5, 0)  -- Поднимаем на 5 единиц по оси Y
+    player.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+end
+end})
+
+Tabs.Teleports:AddButton({
+        Title = "Телепорт на вип",
+        Description = "",
+        Callback = function()
+local targetObject = workspace.VIP:GetChildren()[14]:GetChildren()[2]:GetChildren()[2]:GetChildren()[16]
+if targetObject then
+    local player = game.Players.LocalPlayer
+    local targetPosition = targetObject.Position + Vector3.new(0, 5, 0)  -- Поднимаем на 5 единиц по оси Y
+    player.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+end
+end})
+
+Tabs.Teleports:AddButton({
+        Title = "Телепорт на платформу с лгбт лестницей",
+        Description = "",
+        Callback = function()
+local targetObject = workspace.map:GetChildren()[175]
+if targetObject then
+    local player = game.Players.LocalPlayer
+    local targetPosition = targetObject.Position + Vector3.new(0, 5, 0)  -- Поднимаем на 5 единиц по оси Y
+    player.Character:SetPrimaryPartCFrame(CFrame.new(targetPosition))
+end
+end})
 
 
 Tabs.Misc:AddButton({
