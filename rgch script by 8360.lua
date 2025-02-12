@@ -23,15 +23,6 @@ local Tabs = {
 local Options = Fluent.Options
 
 do
-    Fluent:Notify({
-        Title = "Notification",
-        Content = "This is a notification",
-        SubContent = "SubContent", -- Optional
-        Duration = 5 -- Set to nil to make the notification not disappear
-    })
-
-
-
     Tabs.Main:AddParagraph({
         Title = "Main scripts",
         Content = "Тут находятся основные скрипты."
@@ -230,6 +221,44 @@ end
     Slider:SetValue(50)
 
 
+local Dropdown = Tabs.Basic:AddDropdown("Dropdown", {
+    Title = "Gravity presets.",
+    Values = {"Default gravity", "Low gravity"},
+    Multi = false,
+    Default = 1,
+})
+
+Dropdown:SetValue("Default gravity")
+
+Dropdown:OnChanged(function(Value)
+    print("Dropdown changed:", Value)
+
+    if Value == "Default gravity" then
+        local newGravity = 196.2
+game.Workspace.Gravity = newGravity
+		local newJumpPower = 50 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:FindFirstChildOfClass("Humanoid")
+if humanoid then
+    humanoid.UseJumpPower = true
+    humanoid.JumpPower = newJumpPower
+end
+    elseif Value == "Low gravity" then
+        local newGravity = 47.7
+game.Workspace.Gravity = newGravity
+		local newJumpPower = 48.8 
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:FindFirstChildOfClass("Humanoid")
+if humanoid then
+    humanoid.UseJumpPower = true
+    humanoid.JumpPower = newJumpPower
+end
+    end
+end)
+
+
 
 
 Tabs.Misc:AddButton({
@@ -318,9 +347,9 @@ SaveManager:BuildConfigSection(Tabs.Settings)
 Window:SelectTab(1)
 
 Fluent:Notify({
-    Title = "Fluent",
-    Content = "The script has been loaded.",
-    Duration = 8
+    Title = "Fluent by 8360",
+    Content = "Скрипт полностью загрузился, удачного пользования, фрик!",
+    Duration = 10
 })
 
 -- You can use the SaveManager:LoadAutoloadConfig() to load a config
