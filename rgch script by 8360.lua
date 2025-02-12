@@ -16,6 +16,7 @@ local Window = Fluent:CreateWindow({
 local Tabs = {
     Main = Window:AddTab({ Title = "Main", Icon = "" }),
 	Misc = Window:AddTab({ Title = "Misc", Icon = "" }),
+	Basic = Window:AddTab({ Title = "Basic", Icon = "" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
@@ -153,6 +154,82 @@ Tabs.Misc:AddParagraph({
         Title = "Misc scripts",
         Content = "Тут находятся дополнительные скрипты."
     })
+
+local Slider = Tabs.Basic:AddSlider("Slider", {
+        Title = "Speed",
+        Description = "Меняет скорость игрока.",
+        Default = 16,
+        Min = 0,
+        Max = 300,
+        Rounding = 1,
+        Callback = function(Value)
+            print("Slider was changed:", Value)
+        end
+    })
+
+    Slider:OnChanged(function(Value)
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:FindFirstChildOfClass("Humanoid")
+local newSpeed = Value
+if humanoid then
+    humanoid.WalkSpeed = newSpeed
+end
+
+end)
+Slider:SetValue(16)
+
+
+ local Slider = Tabs.Basic:AddSlider("Slider", {
+        Title = "Gravity",
+        Description = "Меняет гравитацию игрока.",
+        Default = 196.2,
+        Min = 0,
+        Max = 196.2,
+        Rounding = 1,
+        Callback = function(Value)
+            print("Slider was changed:", Value)
+        end
+    })
+
+    Slider:OnChanged(function(Value)
+        local newGravity = Value -- Установите нужное значение гравитации (по умолчанию 196.2)
+
+game.Workspace.Gravity = newGravity
+    end)
+
+    Slider:SetValue(196.2)
+
+    local Slider = Tabs.Basic:AddSlider("Slider", {
+        Title = "Jump Power",
+        Description = "Меняет силу прыжка игрока.",
+        Default = 50,
+        Min = 0,
+        Max = 350,
+        Rounding = 1,
+        Callback = function(Value)
+            print("Slider was changed:", Value)
+        end
+    })
+
+    Slider:OnChanged(function(Value)
+        local newJumpPower = Value 
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+if humanoid then
+    humanoid.UseJumpPower = true
+    humanoid.JumpPower = newJumpPower
+    
+end
+    end)
+
+    Slider:SetValue(50)
+
+
 
 
 Tabs.Misc:AddButton({
